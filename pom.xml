@@ -13,14 +13,45 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all -->
+        <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>3.0.7</version>
             <type>pom</type>
+        </dependency> -->
+        <!-- Required for JOB DSL -->
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>job-dsl</artifactId>
+            <version>1.64</version>
+        </dependency>
+        <!--Adding credentials -->
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>credentials</artifactId>
+            <version>2.1.14</version>
+        </dependency>
+        <!-- Setting the groovy macro Token Processing -->
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>groovy</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <!-- Integration with Jenkins / Hudson internals -->
+        <dependency>
+            <groupId>org.jenkins-ci.main</groupId>
+            <artifactId>jenkins-core</artifactId>
+            <version>2.71</version>
         </dependency>
 
+        <!-- For intellij not to throw exceptions -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -28,4 +59,64 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <!-- Additional repository for Jenkins plugins is required -->
+    <repositories>
+        <repository>
+            <id>jenkins</id>
+            <name>Jenkins releaase</name>
+            <url>http://repo.jenkins-ci.org/releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+            </plugin>
+            <!-- To have course folder on the class path -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>
+                                    <source>sample</source>
+                                    <source>course</source>
+                                </source>
+                            </sources>
+                        </configuration>
+                    </execution>
+
+
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
